@@ -1,20 +1,13 @@
 package Lingua::JA::Categorize::Base;
 use strict;
 use warnings;
-use base qw(Class::Accessor::Fast Class::Data::Inheritable);
+use base qw(Class::Accessor::Fast Class::Data::ConfigHash);
 use Carp;
-
-__PACKAGE__->mk_classdata( _config => {} );
 
 sub new {
     my $class  = shift;
-    my $args   = shift;
-    my %config = ();
-    if ( ref $args eq 'HASH' ) {
-        %config = %$args;
-    }
-    my $self = $class->SUPER::new();
-    $self->config(%config);
+    my $self = $class->SUPER::new({@_});
+    __PACKAGE__->config(@_);
     return $self;
 }
 
@@ -32,49 +25,6 @@ sub mk_virtual_methods {
     return ();
 }
 
-sub config {
-    my $class = shift;
-    if (@_) {
-        if ( @_ == 1 && !defined $_[0] ) {
-            $class->_config(undef);
-        }
-        else {
-            my %args = @_;
-            $class->_config( $class->_merge_hashes( $class->_config, \%args ) );
-        }
-    }
-    return $class->_config;
-}
-
-sub _merge_hashes {
-    my $class = shift;
-    my ( $lefthash, $righthash ) = @_;
-
-    if ( !defined $righthash ) {
-        return $lefthash;
-    }
-
-    if ( !defined $lefthash ) {
-        return $righthash;
-    }
-
-    my %merged = %{$lefthash};
-    for my $key ( keys %{$righthash} ) {
-        my $right_ref = ( ref $righthash->{$key} || '' ) eq 'HASH';
-        my $left_ref =
-          ( ( exists $lefthash->{$key} && ref $lefthash->{$key} ) || '' ) eq
-          'HASH';
-        if ( $right_ref and $left_ref ) {
-            $merged{$key} =
-              merge_hashes( $lefthash->{$key}, $righthash->{$key} );
-        }
-        else {
-            $merged{$key} = $righthash->{$key};
-        }
-    }
-
-    return \%merged;
-}
 
 
 1;
@@ -96,6 +46,17 @@ Lingua::JA::Categorize::Base - Base Class of Lingua::JA::Categorize
 
 =head2 mk_virtual_methods
 
-=head2 config
+=cut
+
+=head1 AUTHOR
+
+takeshi miki E<lt>miki@cpan.orgE<gt>
+
+=head1 LICENSE
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=head1 SEE ALSO
 
 =cut

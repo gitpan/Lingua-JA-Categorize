@@ -3,7 +3,7 @@ name 'Lingua-JA-Categorize';
 all_from 'lib/Lingua/JA/Categorize.pm';
 
 requires 'Class::Accessor::Fast';
-requires 'Class::Data::Inheritable';
+requires 'Class::Data::ConfigHash';
 requires 'Algorithm::NaiveBayes';
 requires 'Lingua::JA::TFIDF';
 requires 'Lingua::JA::Expand';

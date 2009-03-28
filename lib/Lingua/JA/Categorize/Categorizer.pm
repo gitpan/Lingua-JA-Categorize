@@ -9,8 +9,7 @@ __PACKAGE__->mk_accessors($_) for qw( brain );
 
 sub new {
     my $class = shift;
-    my %args  = @_;
-    my $self  = $class->SUPER::new(\%args);
+    my $self  = $class->SUPER::new(@_);
     $self->brain( Algorithm::NaiveBayes->new( purge => 0 ) );
     return $self;
 }
@@ -41,7 +40,7 @@ __END__
 
 =head1 NAME
 
-Lingua::JA::Categorize::Categorizer - the brain of L::J::C
+Lingua::JA::Categorize::Categorizer - The brain of L::J::C
 
 =head1 SYNOPSIS
 
@@ -50,7 +49,7 @@ Lingua::JA::Categorize::Categorizer - the brain of L::J::C
   my $categorizer = Lingua::JA::Categorize::Categorizer->new;
   $categorizer->load('save_file');
   my $result = $categorizer->categorize($text);
-  print Dumper $result->list;
+  print Dumper $result->score;
 
 =head1 DESCRIPTION
 

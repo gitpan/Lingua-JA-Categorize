@@ -3,12 +3,6 @@ use strict;
 use warnings;
 use base qw( Lingua::JA::Categorize::Base );
 
-sub new {
-    my $class = shift;
-    my %args  = @_;
-    return bless { %args }, $class;
-}
-
 sub word_set {
     my $self = shift;
     my $word_set = $self->{word_set};
@@ -39,7 +33,7 @@ __END__
 
 =head1 NAME
 
-Lingua::JA::Categorize::Result - result of L::J::C working 
+Lingua::JA::Categorize::Result - Result of L::J::C working 
 
 =head1 SYNOPSIS
 

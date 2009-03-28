@@ -9,8 +9,7 @@ __PACKAGE__->mk_accessors($_) for qw( calc );
 
 sub new {
     my $class = shift;
-    my %args  = @_;
-    my $self  = $class->SUPER::new(\%args);
+    my $self  = $class->SUPER::new(@_);
     $self->calc( Lingua::JA::TFIDF->new( %{ $self->config } ) );
     return $self;
 }
@@ -33,7 +32,7 @@ __END__
 
 =head1 NAME
 
-Lingua::JA::Categorize::Tokenizer - extract featured words from a document 
+Lingua::JA::Categorize::Tokenizer - Extract featured words from a document 
 
 =head1 SYNOPSIS
 

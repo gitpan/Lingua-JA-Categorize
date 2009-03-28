@@ -9,12 +9,11 @@ use base qw( Lingua::JA::Categorize::Base );
 
 __PACKAGE__->mk_accessors($_) for qw( tokenizer categorizer generator );
 
-our $VERSION = '0.00001';
+our $VERSION = '0.00002';
 
 sub new {
     my $class = shift;
-    my %args  = @_;
-    my $self  = $class->SUPER::new( \%args );
+    my $self  = $class->SUPER::new(@_);
     $self->tokenizer( Lingua::JA::Categorize::Tokenizer->new );
     $self->categorizer( Lingua::JA::Categorize::Categorizer->new );
     $self->generator( Lingua::JA::Categorize::Generator->new );
@@ -22,10 +21,14 @@ sub new {
 }
 
 sub categorize {
-    my $self     = shift;
-    my $text     = shift;
-    my $word_set = $self->tokenizer->tokenize( \$text, 20 );
-    my $score    = $self->categorizer->categorize($word_set);
+    my $self       = shift;
+    my $text       = shift;
+    my $return_num = shift || 20;
+    my $word_set   = $self->tokenizer->tokenize( \$text, $return_num );
+    unless ( $word_set->[0] ) {
+        return undef;
+    }
+    my $score = $self->categorizer->categorize($word_set);
     return Lingua::JA::Categorize::Result->new(
         word_set => $word_set,
         score    => $score
@@ -56,22 +59,22 @@ __END__
 
 =head1 NAME
 
-Lingua::JA::Categorize - a Naive Bayes Classifier for Japanese document.
+Lingua::JA::Categorize - Naive Bayes Classifier for Japanese document.
 
 =head1 SYNOPSIS
 
   use Lingua::JA::Categorize;
 
   # generate
-  my $c = Lingua::JA::Categorize->new;
-  $c->generate($category_conf);
-  $c->save('save_file');
+  my $categorizer = Lingua::JA::Categorize->new;
+  $categorizer->generate($category_conf);
+  $categorizer->save('save_file');
 
   # categorize
-  my $c = Lingua::JA::Categorize->new;
-  $c->load('save_file');
-  my $result = $c->categorize($text);
-  print Dumper $result->list;
+  my $categorizer = Lingua::JA::Categorize->new;
+  $categorizer->load('save_file');
+  my $result = $categorizer->categorize($text);
+  print Dumper $result->score;
 
 =head1 DESCRIPTION
 
@@ -83,19 +86,36 @@ B<THIS MODULE IS IN ITS ALPHA QUALITY.>
 
 =head2 new
 
-=head2 categorize
+The constructor method.
 
-=head2 generate
+=head2 categorize($text, $return_num)
 
-=head2 load
+This method accepts two arguments, a $text and an optional $return_num.
+It return Lingua::JA::Categorize::Result object.
 
-=head2 save
+=head2 generate($configuration_data)
+
+This generate primary data set from the category configuration.
+
+=head2 load('filename')
+
+Load the saved file (that is Storable).
+
+=head2 save('filemname')
+
+Save the data to filename (that is Storable).
 
 =head2 tokenizer
 
+Accessor method to Lingua::JA::Categorize::Tokenizer.
+
 =head2 categorizer
 
+Accessor method to Lingua::JA::Categorize::Categorizer.
+
 =head2 generator
+
+Accessor method to Lingua::JA::Categorize::Generator.
 
 =head1 AUTHOR
 

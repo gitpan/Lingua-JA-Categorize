@@ -174,7 +174,7 @@ template:
         <html>
         <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <script type="text/javascript" src="http://cachefile.net/scripts/jquery/1.2.6/jquery-1.2.6.js"></script>
+        <script type="text/javascript" src="http://jqueryjs.googlecode.com/files/jquery-1.3.2.min.js"></script>
         <script type="text/javascript" src="my.js"></script>
 
         <style type="text/css">
@@ -355,3 +355,4 @@ template:
                 pulldown.a = null;
             };
         }
+
