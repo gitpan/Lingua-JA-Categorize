@@ -9,7 +9,7 @@ use base qw( Lingua::JA::Categorize::Base );
 
 __PACKAGE__->mk_accessors($_) for qw( tokenizer categorizer generator );
 
-our $VERSION = '0.00002';
+our $VERSION = '0.00003';
 
 sub new {
     my $class = shift;
@@ -25,9 +25,6 @@ sub categorize {
     my $text       = shift;
     my $return_num = shift || 20;
     my $word_set   = $self->tokenizer->tokenize( \$text, $return_num );
-    unless ( $word_set->[0] ) {
-        return undef;
-    }
     my $score = $self->categorizer->categorize($word_set);
     return Lingua::JA::Categorize::Result->new(
         word_set => $word_set,

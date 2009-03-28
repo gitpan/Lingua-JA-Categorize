@@ -17,6 +17,9 @@ sub score {
     my $self = shift;
     my $num  = shift;
     $num ||= 3;
+    unless($self->word_set->[0]){
+        return undef;
+    }
     my $score = $self->{score};
     my @list;
     my $i = 0;
