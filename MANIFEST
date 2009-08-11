@@ -1,5 +1,8 @@
 Changes
 eg/generate.pl
+eg/more_train/extract_categories_from_oshiete_goo.pl
+eg/more_train/lib/MyEngine/Osiete.pm
+eg/more_train/more_train.pl
 eg/sample.bin
 eg/server.pl
 eg/simple.pl
@@ -21,6 +24,7 @@ lib/Lingua/JA/Categorize/Result.pm
 lib/Lingua/JA/Categorize/Tokenizer.pm
 Makefile.PL
 MANIFEST			This list of files
+META.yml
 README
 t/00_compile.t
 t/01_categorize.t
