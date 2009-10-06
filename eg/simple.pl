@@ -1,11 +1,13 @@
 use strict;
+use warnings;
 use blib;
-use Lingua::JA::Categorize;
 use HTML::Feature;
 use Data::Dumper;
+use Lingua::JA::Categorize;
+use FindBin;
 
-my $categorizer = Lingua::JA::Categorize->new;
-$categorizer->load("sample.bin");
+local $Data::Dumper::Terse  = 1;
+local $Data::Dumper::Indent = 1;
 
 my $feature = HTML::Feature->new(
     engines => [
@@ -15,20 +17,29 @@ my $feature = HTML::Feature->new(
     ]
 );
 
-while (1) {
-    print "Input URL : ";
+my $datafile    = "$FindBin::RealBin/sample.bin";
+my $categorizer = Lingua::JA::Categorize->new;
+$categorizer->load($datafile);
+
+loop();
+
+sub loop {
+    print "----\n";
+    print "Input URL: ";
     my $url = <STDIN>;
     chomp $url;
-
     my $text = $feature->parse($url)->text;
-    print "-" x 20, "\n";
-    print $text, "\n";
-    print "-" x 20, "\n";
 
     my $result = $categorizer->categorize($text);
-    print Dumper $result->word_set;
-    print "-" x 20, "\n";
-    print Dumper $result->score;
-    print "-" x 20, "\n";
-}
+    print "\n";
 
+    print "Result(score) :\n";
+    print Dumper $result->score();
+    print "\n";
+
+    print "Confidence : ";
+    print $result->confidence, "\n";
+    print "\n";
+
+    loop();
+}

@@ -2,6 +2,7 @@ package Lingua::JA::Categorize::Categorizer;
 use strict;
 use warnings;
 use Algorithm::NaiveBayes;
+use Lingua::JA::Categorize::Result;
 use base qw( Lingua::JA::Categorize::Base );
 
 __PACKAGE__->mk_accessors($_) for qw( brain );
@@ -30,13 +31,47 @@ sub new {
     my $class = shift;
     my $self  = $class->SUPER::new(@_);
     $self->brain( Algorithm::NaiveBayes->new( purge => 0 ) );
+    {
+        no warnings 'redefine';
+        *Algorithm::NaiveBayes::Model::Frequency::do_predict = sub {
+            my ( $self, $m, $newattrs ) = @_;
+            my %scores = %{ $m->{prior_probs} };
+            while ( my ( $feature, $value ) = each %$newattrs ) {
+                unless ( exists $m->{attributes}{$feature} ) {
+                    push( @{ $self->{no_match_features} }, $feature );
+                    next;
+                }
+                else {
+                    push( @{ $self->{match_features} }, $feature );
+                }
+                while ( my ( $label, $attributes ) = each %{ $m->{probs} } ) {
+                    $scores{$label} +=
+                      ( $attributes->{$feature} || $m->{smoother}{$label} ) *
+                      $value;
+                }
+            }
+            Algorithm::NaiveBayes::Util::rescale( \%scores );
+            return \%scores;
+        };
+    }
     return $self;
 }
 
 sub categorize {
     my $self     = shift;
     my $word_set = shift;
-    my $result   = $self->brain->predict( attributes => $word_set );
+    undef $self->brain->{no_match_features};
+    undef $self->brain->{match_features};
+    my $score      = $self->brain->predict( attributes => $word_set );
+    my $no_matches = $self->brain->{no_match_features};
+    my $matches    = $self->brain->{match_features};
+    my $result     = Lingua::JA::Categorize::Result->new(
+        context    => $self->context,
+        score      => $score,
+        matches    => $matches,
+        no_matches => $no_matches,
+        word_set   => $word_set,
+    );
     return $result;
 }
 
