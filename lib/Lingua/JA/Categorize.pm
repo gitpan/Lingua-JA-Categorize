@@ -8,7 +8,7 @@ use base qw( Lingua::JA::Categorize::Base );
 
 __PACKAGE__->mk_accessors($_) for qw( tokenizer categorizer generator );
 
-our $VERSION = '0.01001';
+our $VERSION = '0.02002';
 
 sub new {
     my $class = shift;
@@ -23,11 +23,12 @@ sub new {
 }
 
 sub categorize {
-    my $self       = shift;
-    my $text       = shift;
-    my $return_num = shift || 20;
-    my $word_set   = $self->tokenizer->tokenize( \$text, $return_num );
-    my $result     = $self->categorizer->categorize($word_set);
+    my $self           = shift;
+    my $text           = shift;
+	my $word_num       = shift;
+    my $word_set       = $self->tokenizer->tokenize( \$text, $word_num );
+    my $user_extention = $self->tokenizer->user_extention;
+    my $result = $self->categorizer->categorize( $word_set, $user_extention );
     return $result;
 }
 
@@ -89,16 +90,15 @@ B<THIS MODULE IS IN ITS ALPHA QUALITY.>
 
 The constructor method.
 
-=head2 categorize($text, $return_num)
+=head2 categorize($text)
 
-This method accepts two arguments, a $text and an optional $return_num.
-It return Lingua::JA::Categorize::Result object.
+This method accepts $text, and returns Lingua::JA::Categorize::Result object.
 
 =head2 train
 
-Training method of bayean filter.
+Training method of bayesian filter. 
 
-=head2 generate($configuration_data)
+=head2 generate(config => \%configuration_data)
 
 This generate primary data set from the category configuration.
 

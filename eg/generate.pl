@@ -4,9 +4,16 @@ use blib;
 use Lingua::JA::Categorize;
 use YAML;
 
-my $data        = YAML::LoadFile('./more_train/config.yaml');
-#my $data        = YAML::Load( join '', <DATA> );
-my $generator   = Lingua::JA::Categorize->new;
+print "Input your 'Yahoo API appid':";
+my $appid = <STDIN>;
+chomp $appid;
+warn(
+"You must set your own yahoo_api_appid, but now this program will try to 'test' for temporary"
+) if !$appid;
+my %config = ( yahoo_api_appid => $appid, yahoo_api_premium => 1 );
+
+my $data        = YAML::Load( join '', <DATA> );
+my $generator   = Lingua::JA::Categorize->new( config => \%config);
 my $save_file   = "sample.bin";
 
 $generator->generate($data);
@@ -14,246 +21,6 @@ $generator->save($save_file);
 
 __DATA__
 --- 
-"[地域情報] 旅行・レジャー・生活 :: [地域情報] 旅行・レジャー・生活 :: [地域情報] 旅行・レジャー・生活": 
-  keyword: 
-    - "[地域情報] 旅行 レジャー 生活"
-  weight: 3
-"[地域情報] 旅行・レジャー・生活 :: 国内 :: 中国・四国": 
-  keyword: 
-    - 中国 四国
-  weight: 1
-"[地域情報] 旅行・レジャー・生活 :: 国内 :: 九州・沖縄": 
-  keyword: 
-    - 九州 沖縄
-  weight: 1
-"[地域情報] 旅行・レジャー・生活 :: 国内 :: 北海道": 
-  keyword: 
-    - 北海道
-  weight: 1
-"[地域情報] 旅行・レジャー・生活 :: 国内 :: 国内": 
-  keyword: 
-    - 国内
-  weight: 3
-"[地域情報] 旅行・レジャー・生活 :: 国内 :: 国内旅行(全国)": 
-  keyword: 
-    - 国内旅行(全国)
-  weight: 1
-"[地域情報] 旅行・レジャー・生活 :: 国内 :: 東北": 
-  keyword: 
-    - 東北
-  weight: 1
-"[地域情報] 旅行・レジャー・生活 :: 国内 :: 東海": 
-  keyword: 
-    - 東海
-  weight: 1
-"[地域情報] 旅行・レジャー・生活 :: 国内 :: 甲信越・北陸": 
-  keyword: 
-    - 甲信越 北陸
-  weight: 1
-"[地域情報] 旅行・レジャー・生活 :: 国内 :: 遊園地・テーマパーク(全国)": 
-  keyword: 
-    - 遊園地 テーマパーク(全国)
-  weight: 1
-"[地域情報] 旅行・レジャー・生活 :: 国内 :: 関東": 
-  keyword: 
-    - 関東
-  weight: 1
-"[地域情報] 旅行・レジャー・生活 :: 国内 :: 関西": 
-  keyword: 
-    - 関西
-  weight: 1
-"[地域情報] 旅行・レジャー・生活 :: 国内 :: 食べ歩き(全国)": 
-  keyword: 
-    - 食べ歩き(全国)
-  weight: 1
-"[地域情報] 旅行・レジャー・生活 :: 海外 :: アジア": 
-  keyword: 
-    - アジア
-  weight: 1
-"[地域情報] 旅行・レジャー・生活 :: 海外 :: アフリカ": 
-  keyword: 
-    - アフリカ
-  weight: 1
-"[地域情報] 旅行・レジャー・生活 :: 海外 :: オセアニア": 
-  keyword: 
-    - オセアニア
-  weight: 1
-"[地域情報] 旅行・レジャー・生活 :: 海外 :: ヨーロッパ": 
-  keyword: 
-    - ヨーロッパ
-  weight: 1
-"[地域情報] 旅行・レジャー・生活 :: 海外 :: 中南米・カリブ": 
-  keyword: 
-    - 中南米 カリブ
-  weight: 1
-"[地域情報] 旅行・レジャー・生活 :: 海外 :: 中東": 
-  keyword: 
-    - 中東
-  weight: 1
-"[地域情報] 旅行・レジャー・生活 :: 海外 :: 北アメリカ": 
-  keyword: 
-    - 北アメリカ
-  weight: 1
-"[地域情報] 旅行・レジャー・生活 :: 海外 :: 海外": 
-  keyword: 
-    - 海外
-  weight: 3
-"[地域情報] 旅行・レジャー・生活 :: 海外 :: 海外旅行(全般)": 
-  keyword: 
-    - 海外旅行(全般)
-  weight: 1
-"[技術者向] コンピューター :: OS :: BSD系OS": 
-  keyword: 
-    - BSD系OS
-  weight: 1
-"[技術者向] コンピューター :: OS :: Linux系OS": 
-  keyword: 
-    - Linux系OS
-  weight: 1
-"[技術者向] コンピューター :: OS :: OS": 
-  keyword: 
-    - OS
-  weight: 3
-"[技術者向] コンピューター :: OS :: Solaris系OS": 
-  keyword: 
-    - Solaris系OS
-  weight: 1
-"[技術者向] コンピューター :: OS :: Windows系OS": 
-  keyword: 
-    - Windows系OS
-  weight: 1
-"[技術者向] コンピューター :: [技術者向] コンピューター :: [技術者向] コンピューター": 
-  keyword: 
-    - "[技術者向] コンピューター"
-  weight: 3
-"[技術者向] コンピューター :: データベース :: MySQL": 
-  keyword: 
-    - MySQL
-  weight: 1
-"[技術者向] コンピューター :: データベース :: Oracle": 
-  keyword: 
-    - Oracle
-  weight: 1
-"[技術者向] コンピューター :: データベース :: PostgreSQL": 
-  keyword: 
-    - PostgreSQL
-  weight: 1
-"[技術者向] コンピューター :: データベース :: SQL Server": 
-  keyword: 
-    - SQL Server
-  weight: 1
-"[技術者向] コンピューター :: データベース :: データベース": 
-  keyword: 
-    - データベース
-  weight: 3
-"[技術者向] コンピューター :: ネットワークセキュリティ :: ネットワークセキュリティ": 
-  keyword: 
-    - ネットワークセキュリティ
-  weight: 3
-"[技術者向] コンピューター :: ハードウェア(サーバー) :: ハードウェア(サーバー)": 
-  keyword: 
-    - ハードウェア(サーバー)
-  weight: 3
-"[技術者向] コンピューター :: プログラミング :: AJAX": 
-  keyword: 
-    - AJAX
-  weight: 1
-"[技術者向] コンピューター :: プログラミング :: C&amp;C++": 
-  keyword: 
-    - C&amp;C++
-  weight: 1
-"[技術者向] コンピューター :: プログラミング :: CGI": 
-  keyword: 
-    - CGI
-  weight: 1
-"[技術者向] コンピューター :: プログラミング :: Flash": 
-  keyword: 
-    - Flash
-  weight: 1
-"[技術者向] コンピューター :: プログラミング :: HTML": 
-  keyword: 
-    - HTML
-  weight: 1
-"[技術者向] コンピューター :: プログラミング :: Java": 
-  keyword: 
-    - Java
-  weight: 1
-"[技術者向] コンピューター :: プログラミング :: JavaScript": 
-  keyword: 
-    - JavaScript
-  weight: 1
-"[技術者向] コンピューター :: プログラミング :: Microsoft ASP": 
-  keyword: 
-    - Microsoft ASP
-  weight: 1
-"[技術者向] コンピューター :: プログラミング :: PHP": 
-  keyword: 
-    - PHP
-  weight: 1
-"[技術者向] コンピューター :: プログラミング :: Perl": 
-  keyword: 
-    - Perl
-  weight: 1
-"[技術者向] コンピューター :: プログラミング :: Ruby": 
-  keyword: 
-    - Ruby
-  weight: 1
-"[技術者向] コンピューター :: プログラミング :: Visual Basic": 
-  keyword: 
-    - Visual Basic
-  weight: 1
-"[技術者向] コンピューター :: プログラミング :: Web Page Design": 
-  keyword: 
-    - Web Page Design
-  weight: 1
-"[技術者向] コンピューター :: プログラミング :: XML": 
-  keyword: 
-    - XML
-  weight: 1
-"[技術者向] コンピューター :: プログラミング :: プログラミング": 
-  keyword: 
-    - プログラミング
-  weight: 3
-"[技術者向] コンピューター :: 業務ソフトウェア :: CAD・DTP": 
-  keyword: 
-    - CAD DTP
-  weight: 1
-"[技術者向] コンピューター :: 業務ソフトウェア :: オープンソース": 
-  keyword: 
-    - オープンソース
-  weight: 1
-"[技術者向] コンピューター :: 業務ソフトウェア :: グラフィックソフト": 
-  keyword: 
-    - グラフィックソフト
-  weight: 1
-"[技術者向] コンピューター :: 業務ソフトウェア :: グループウェア": 
-  keyword: 
-    - グループウェア
-  weight: 1
-"[技術者向] コンピューター :: 業務ソフトウェア :: 会計ソフト": 
-  keyword: 
-    - 会計ソフト
-  weight: 1
-"[技術者向] コンピューター :: 業務ソフトウェア :: 業務ソフトウェア": 
-  keyword: 
-    - 業務ソフトウェア
-  weight: 3
-"[技術者向] コンピューター :: 運用・管理 :: 運用・管理": 
-  keyword: 
-    - 運用 管理
-  weight: 3
-"[技術者向] コンピューター :: 開発 :: オープンソース": 
-  keyword: 
-    - オープンソース
-  weight: 1
-"[技術者向] コンピューター :: 開発 :: スケーラビリティ": 
-  keyword: 
-    - スケーラビリティ
-  weight: 1
-"[技術者向] コンピューター :: 開発 :: 開発": 
-  keyword: 
-    - 開発
-  weight: 3
 "エンターテインメント :: TV :: CM": 
   keyword: 
     - CM
@@ -298,9 +65,9 @@ __DATA__
   keyword: 
     - 韓流芸能人 タレント
   weight: 1
-"エンターテインメント :: アニメ :: アニメ": 
+"エンターテインメント :: アニメ・声優 :: アニメ・声優": 
   keyword: 
-    - アニメ
+    - アニメ 声優
   weight: 3
 "エンターテインメント :: エンターテインメント :: エンターテインメント": 
   keyword: 
@@ -346,13 +113,17 @@ __DATA__
   keyword: 
     - テニス
   weight: 1
-"エンターテインメント :: スポーツ :: バスケットボール＆バレーボール": 
+"エンターテインメント :: スポーツ :: バスケットボール": 
   keyword: 
-    - バスケットボール バレーボール
+    - バスケットボール
   weight: 1
 "エンターテインメント :: スポーツ :: バドミントン": 
   keyword: 
     - バドミントン
+  weight: 1
+"エンターテインメント :: スポーツ :: バレーボール": 
+  keyword: 
+    - バレーボール
   weight: 1
 "エンターテインメント :: スポーツ :: フィギュアスケート": 
   keyword: 
@@ -366,13 +137,17 @@ __DATA__
   keyword: 
     - モータースポーツ
   weight: 1
+"エンターテインメント :: スポーツ :: ラグビー・アメリカンフットボール": 
+  keyword: 
+    - ラグビー アメリカンフットボール
+  weight: 1
+"エンターテインメント :: スポーツ :: 五輪": 
+  keyword: 
+    - 五輪
+  weight: 1
 "エンターテインメント :: スポーツ :: 体操・新体操": 
   keyword: 
     - 体操 新体操
-  weight: 1
-"エンターテインメント :: スポーツ :: 北京五輪": 
-  keyword: 
-    - 北京五輪
   weight: 1
 "エンターテインメント :: スポーツ :: 卓球": 
   keyword: 
@@ -381,6 +156,10 @@ __DATA__
 "エンターテインメント :: スポーツ :: 格闘技": 
   keyword: 
     - 格闘技
+  weight: 1
+"エンターテインメント :: スポーツ :: 武道": 
+  keyword: 
+    - 武道
   weight: 1
 "エンターテインメント :: スポーツ :: 水泳": 
   keyword: 
@@ -393,6 +172,14 @@ __DATA__
 "エンターテインメント :: スポーツ :: 陸上": 
   keyword: 
     - 陸上
+  weight: 1
+"エンターテインメント :: ラジオ :: ラジオ": 
+  keyword: 
+    - ラジオ
+  weight: 3
+"エンターテインメント :: 卓上ゲーム :: カードゲーム": 
+  keyword: 
+    - カードゲーム
   weight: 1
 "エンターテインメント :: 卓上ゲーム :: 卓上ゲーム": 
   keyword: 
@@ -430,6 +217,10 @@ __DATA__
   keyword: 
     - 演劇 古典芸能
   weight: 3
+"エンターテインメント :: 特撮・VFX :: 特撮・VFX": 
+  keyword: 
+    - 特撮 VFX
+  weight: 3
 "エンターテインメント :: 音楽・ダンス :: インディーズ": 
   keyword: 
     - インディーズ
@@ -453,6 +244,10 @@ __DATA__
 "エンターテインメント :: 音楽・ダンス :: ライブ・コンサート": 
   keyword: 
     - ライブ コンサート
+  weight: 1
+"エンターテインメント :: 音楽・ダンス :: 作詞・作曲": 
+  keyword: 
+    - 作詞 作曲
   weight: 1
 "エンターテインメント :: 音楽・ダンス :: 国内アーティスト": 
   keyword: 
@@ -478,6 +273,158 @@ __DATA__
   keyword: 
     - 音楽配信
   weight: 1
+"コンピューター :: OS :: BSD系OS": 
+  keyword: 
+    - BSD系OS
+  weight: 1
+"コンピューター :: OS :: Linux系OS": 
+  keyword: 
+    - Linux系OS
+  weight: 1
+"コンピューター :: OS :: OS": 
+  keyword: 
+    - OS
+  weight: 3
+"コンピューター :: OS :: Solaris系OS": 
+  keyword: 
+    - Solaris系OS
+  weight: 1
+"コンピューター :: OS :: Windows系OS": 
+  keyword: 
+    - Windows系OS
+  weight: 1
+"コンピューター :: コンピューター :: コンピューター": 
+  keyword: 
+    - コンピューター
+  weight: 3
+"コンピューター :: データベース :: MySQL": 
+  keyword: 
+    - MySQL
+  weight: 1
+"コンピューター :: データベース :: Oracle": 
+  keyword: 
+    - Oracle
+  weight: 1
+"コンピューター :: データベース :: PostgreSQL": 
+  keyword: 
+    - PostgreSQL
+  weight: 1
+"コンピューター :: データベース :: SQL Server": 
+  keyword: 
+    - SQL Server
+  weight: 1
+"コンピューター :: データベース :: データベース": 
+  keyword: 
+    - データベース
+  weight: 3
+"コンピューター :: ネットワークセキュリティ :: ネットワークセキュリティ": 
+  keyword: 
+    - ネットワークセキュリティ
+  weight: 3
+"コンピューター :: ハードウェア(サーバー) :: ハードウェア(サーバー)": 
+  keyword: 
+    - ハードウェア(サーバー)
+  weight: 3
+"コンピューター :: プログラミング :: AJAX": 
+  keyword: 
+    - AJAX
+  weight: 1
+"コンピューター :: プログラミング :: C&amp;C++": 
+  keyword: 
+    - C&amp;C++
+  weight: 1
+"コンピューター :: プログラミング :: CGI": 
+  keyword: 
+    - CGI
+  weight: 1
+"コンピューター :: プログラミング :: Flash": 
+  keyword: 
+    - Flash
+  weight: 1
+"コンピューター :: プログラミング :: HTML": 
+  keyword: 
+    - HTML
+  weight: 1
+"コンピューター :: プログラミング :: Java": 
+  keyword: 
+    - Java
+  weight: 1
+"コンピューター :: プログラミング :: JavaScript": 
+  keyword: 
+    - JavaScript
+  weight: 1
+"コンピューター :: プログラミング :: Microsoft ASP": 
+  keyword: 
+    - Microsoft ASP
+  weight: 1
+"コンピューター :: プログラミング :: PHP": 
+  keyword: 
+    - PHP
+  weight: 1
+"コンピューター :: プログラミング :: Perl": 
+  keyword: 
+    - Perl
+  weight: 1
+"コンピューター :: プログラミング :: Ruby": 
+  keyword: 
+    - Ruby
+  weight: 1
+"コンピューター :: プログラミング :: Visual Basic": 
+  keyword: 
+    - Visual Basic
+  weight: 1
+"コンピューター :: プログラミング :: Webデザイン・CSS": 
+  keyword: 
+    - Webデザイン CSS
+  weight: 1
+"コンピューター :: プログラミング :: XML": 
+  keyword: 
+    - XML
+  weight: 1
+"コンピューター :: プログラミング :: プログラミング": 
+  keyword: 
+    - プログラミング
+  weight: 3
+"コンピューター :: 業務ソフトウェア :: CAD・DTP": 
+  keyword: 
+    - CAD DTP
+  weight: 1
+"コンピューター :: 業務ソフトウェア :: オープンソース": 
+  keyword: 
+    - オープンソース
+  weight: 1
+"コンピューター :: 業務ソフトウェア :: グラフィックソフト": 
+  keyword: 
+    - グラフィックソフト
+  weight: 1
+"コンピューター :: 業務ソフトウェア :: グループウェア": 
+  keyword: 
+    - グループウェア
+  weight: 1
+"コンピューター :: 業務ソフトウェア :: 会計ソフト": 
+  keyword: 
+    - 会計ソフト
+  weight: 1
+"コンピューター :: 業務ソフトウェア :: 業務ソフトウェア": 
+  keyword: 
+    - 業務ソフトウェア
+  weight: 3
+"コンピューター :: 運用・管理 :: 運用・管理": 
+  keyword: 
+    - 運用 管理
+  weight: 3
+"コンピューター :: 開発 :: オープンソース": 
+  keyword: 
+    - オープンソース
+  weight: 1
+"コンピューター :: 開発 :: スケーラビリティ": 
+  keyword: 
+    - スケーラビリティ
+  weight: 1
+"コンピューター :: 開発 :: 開発": 
+  keyword: 
+    - 開発
+  weight: 3
 "デジタルライフ :: E-Mail :: E-Mail": 
   keyword: 
     - E-Mail
@@ -486,6 +433,10 @@ __DATA__
   keyword: 
     - Macintosh
   weight: 3
+"デジタルライフ :: PCパーツ・周辺機器 :: CPU・メモリ・マザーボード": 
+  keyword: 
+    - CPU メモリ マザーボード
+  weight: 1
 "デジタルライフ :: PCパーツ・周辺機器 :: PCパーツ・周辺機器": 
   keyword: 
     - PCパーツ 周辺機器
@@ -497,6 +448,10 @@ __DATA__
 "デジタルライフ :: PCパーツ・周辺機器 :: ディスプレイ": 
   keyword: 
     - ディスプレイ
+  weight: 1
+"デジタルライフ :: PCパーツ・周辺機器 :: ドライブ・ストレージ": 
+  keyword: 
+    - ドライブ ストレージ
   weight: 1
 "デジタルライフ :: PCパーツ・周辺機器 :: ネットワーク機器": 
   keyword: 
@@ -510,9 +465,9 @@ __DATA__
   keyword: 
     - プリンター スキャナー
   weight: 1
-"デジタルライフ :: PCパーツ・周辺機器 :: ワイヤレス・無線LAN": 
+"デジタルライフ :: PCパーツ・周辺機器 :: マウス・キーボード": 
   keyword: 
-    - ワイヤレス 無線LAN
+    - マウス キーボード
   weight: 1
 "デジタルライフ :: SNS :: SNS": 
   keyword: 
@@ -569,6 +524,10 @@ __DATA__
 "デジタルライフ :: インターネット接続 :: ホームページスペース・ASP": 
   keyword: 
     - ホームページスペース ASP
+  weight: 1
+"デジタルライフ :: インターネット接続 :: ワイヤレス・無線LAN": 
+  keyword: 
+    - ワイヤレス 無線LAN
   weight: 1
 "デジタルライフ :: ウィルス対策 :: ウィルス対策": 
   keyword: 
@@ -674,9 +633,9 @@ __DATA__
   keyword: 
     - デジタルカメラ
   weight: 1
-"デジタルライフ :: マルチメディア :: デジタルビデオカメラ": 
+"デジタルライフ :: マルチメディア :: ビデオカメラ": 
   keyword: 
-    - デジタルビデオカメラ
+    - ビデオカメラ
   weight: 1
 "デジタルライフ :: マルチメディア :: マルチメディア": 
   keyword: 
@@ -690,9 +649,13 @@ __DATA__
   keyword: 
     - ワンセグ放送
   weight: 3
-"デジタルライフ :: 携帯・PHS :: DoCoMo": 
+"デジタルライフ :: 動画サービス :: 動画サービス": 
   keyword: 
-    - DoCoMo
+    - 動画サービス
+  weight: 3
+"デジタルライフ :: 携帯・PHS :: Android": 
+  keyword: 
+    - Android
   weight: 1
 "デジタルライフ :: 携帯・PHS :: SoftBank": 
   keyword: 
@@ -706,25 +669,41 @@ __DATA__
   keyword: 
     - au
   weight: 1
+"デジタルライフ :: 携帯・PHS :: docomo": 
+  keyword: 
+    - docomo
+  weight: 1
+"デジタルライフ :: 携帯・PHS :: iPhone": 
+  keyword: 
+    - iPhone
+  weight: 1
+"デジタルライフ :: 携帯・PHS :: アバター": 
+  keyword: 
+    - アバター
+  weight: 1
 "デジタルライフ :: 携帯・PHS :: イーモバイル": 
   keyword: 
     - イーモバイル
   weight: 1
-"デジタルライフ :: 携帯・PHS :: スマートフォン": 
+"デジタルライフ :: 携帯・PHS :: ケータイゲーム": 
   keyword: 
-    - スマートフォン
+    - ケータイゲーム
   weight: 1
-"デジタルライフ :: 携帯・PHS :: モバイルゲーム": 
+"デジタルライフ :: 携帯・PHS :: デコメ": 
   keyword: 
-    - モバイルゲーム
+    - デコメ
   weight: 1
 "デジタルライフ :: 携帯・PHS :: 携帯・PHS": 
   keyword: 
     - 携帯 PHS
   weight: 3
-"デジタルライフ :: 携帯・PHS :: 着メロ・画像": 
+"デジタルライフ :: 携帯・PHS :: 着うた・着メロ・待受・動画": 
   keyword: 
-    - 着メロ 画像
+    - 着うた 着メロ 待受 動画
+  weight: 1
+"デジタルライフ :: 携帯・PHS :: 電子書籍": 
+  keyword: 
+    - 電子書籍
   weight: 1
 "デジタルライフ :: 通信 :: FAX": 
   keyword: 
@@ -778,6 +757,10 @@ __DATA__
   keyword: 
     - アルバイト パート
   weight: 1
+"ビジネス＆キャリア :: 就職・転職 :: 失業・リストラ": 
+  keyword: 
+    - 失業 リストラ
+  weight: 1
 "ビジネス＆キャリア :: 就職・転職 :: 就職": 
   keyword: 
     - 就職
@@ -810,9 +793,9 @@ __DATA__
   keyword: 
     - 財務 会計 経理
   weight: 3
-"ビジネス＆キャリア :: 資格 :: Microsoft認定技術者": 
+"ビジネス＆キャリア :: 資格 :: Microsoft認定資格": 
   keyword: 
-    - Microsoft認定技術者
+    - Microsoft認定資格
   weight: 1
 "ビジネス＆キャリア :: 資格 :: TOEFL・TOEIC・英語検定": 
   keyword: 
@@ -822,6 +805,14 @@ __DATA__
   keyword: 
     - フィナンシャルプランナー
   weight: 1
+"ビジネス＆キャリア :: 資格 :: 介護士・ケアマネージャー": 
+  keyword: 
+    - 介護士 ケアマネージャー
+  weight: 1
+"ビジネス＆キャリア :: 資格 :: 公務員試験": 
+  keyword: 
+    - 公務員試験
+  weight: 1
 "ビジネス＆キャリア :: 資格 :: 公認会計士": 
   keyword: 
     - 公認会計士
@@ -829,6 +820,10 @@ __DATA__
 "ビジネス＆キャリア :: 資格 :: 建築士": 
   keyword: 
     - 建築士
+  weight: 1
+"ビジネス＆キャリア :: 資格 :: 弁護士": 
+  keyword: 
+    - 弁護士
   weight: 1
 "ビジネス＆キャリア :: 資格 :: 情報処理技術者": 
   keyword: 
@@ -853,6 +848,14 @@ __DATA__
 "ビジネス＆キャリア :: 資格 :: 美容師・理容師": 
   keyword: 
     - 美容師 理容師
+  weight: 1
+"ビジネス＆キャリア :: 資格 :: 自動車免許": 
+  keyword: 
+    - 自動車免許
+  weight: 1
+"ビジネス＆キャリア :: 資格 :: 薬剤師": 
+  keyword: 
+    - 薬剤師
   weight: 1
 "ビジネス＆キャリア :: 資格 :: 行政書士・司法書士": 
   keyword: 
@@ -882,6 +885,10 @@ __DATA__
   keyword: 
     - 健康保険
   weight: 1
+"マネー :: 保険 :: 医療保険": 
+  keyword: 
+    - 医療保険
+  weight: 1
 "マネー :: 保険 :: 損害保険": 
   keyword: 
     - 損害保険
@@ -894,13 +901,13 @@ __DATA__
   keyword: 
     - 雇用保険
   weight: 1
-"マネー :: 投資・融資 :: ヨーロッパ株": 
+"マネー :: 投資・融資 :: BRICs・VISTA": 
   keyword: 
-    - ヨーロッパ株
+    - BRICs VISTA
   weight: 1
-"マネー :: 投資・融資 :: 中国株": 
+"マネー :: 投資・融資 :: ETF・REIT": 
   keyword: 
-    - 中国株
+    - ETF REIT
   weight: 1
 "マネー :: 投資・融資 :: 債券": 
   keyword: 
@@ -910,10 +917,6 @@ __DATA__
   keyword: 
     - 先物
   weight: 1
-"マネー :: 投資・融資 :: 北米株": 
-  keyword: 
-    - 北米株
-  weight: 1
 "マネー :: 投資・融資 :: 国内株": 
   keyword: 
     - 国内株
@@ -922,29 +925,37 @@ __DATA__
   keyword: 
     - 投資 融資
   weight: 3
-"マネー :: 投資・融資 :: 投資信託": 
-  keyword: 
-    - 投資信託
-  weight: 1
-"マネー :: 投資・融資 :: 新興国株": 
-  keyword: 
-    - 新興国株
-  weight: 1
 "マネー :: 投資・融資 :: 株式全般": 
   keyword: 
     - 株式全般
   weight: 1
-"マネー :: 投資・融資 :: 為替": 
+"マネー :: 投資・融資 :: 海外株": 
   keyword: 
-    - 為替
+    - 海外株
+  weight: 1
+"マネー :: 投資・融資 :: 為替・FX": 
+  keyword: 
+    - 為替 FX
   weight: 1
 "マネー :: 投資・融資 :: 融資": 
   keyword: 
     - 融資
   weight: 1
+"マネー :: 投資・融資 :: 資産運用・投資信託": 
+  keyword: 
+    - 資産運用 投資信託
+  weight: 1
 "マネー :: 暮らしのマネー :: ネットバンキング": 
   keyword: 
     - ネットバンキング
+  weight: 1
+"マネー :: 暮らしのマネー :: ローン": 
+  keyword: 
+    - ローン
+  weight: 1
+"マネー :: 暮らしのマネー :: 家計の相談・家計診断": 
+  keyword: 
+    - 家計の相談 家計診断
   weight: 1
 "マネー :: 暮らしのマネー :: 年金": 
   keyword: 
@@ -954,9 +965,9 @@ __DATA__
   keyword: 
     - 暮らしのマネー
   weight: 3
-"マネー :: 暮らしのマネー :: 消費者金融": 
+"マネー :: 暮らしのマネー :: 消費者金融・債務整理": 
   keyword: 
-    - 消費者金融
+    - 消費者金融 債務整理
   weight: 1
 "マネー :: 暮らしのマネー :: 税金": 
   keyword: 
@@ -966,6 +977,10 @@ __DATA__
   keyword: 
     - 貯蓄
   weight: 1
+"マネー :: 暮らしのマネー :: 電子マネー": 
+  keyword: 
+    - 電子マネー
+  weight: 1
 "ライフ :: ペット :: ペット": 
   keyword: 
     - ペット
@@ -974,9 +989,13 @@ __DATA__
   keyword: 
     - 小動物
   weight: 1
-"ライフ :: ペット :: 熱帯魚": 
+"ライフ :: ペット :: 昆虫": 
   keyword: 
-    - 熱帯魚
+    - 昆虫
+  weight: 1
+"ライフ :: ペット :: 爬虫類・両生類": 
+  keyword: 
+    - 爬虫類 両生類
   weight: 1
 "ライフ :: ペット :: 犬": 
   keyword: 
@@ -985,6 +1004,14 @@ __DATA__
 "ライフ :: ペット :: 猫": 
   keyword: 
     - 猫
+  weight: 1
+"ライフ :: ペット :: 魚": 
+  keyword: 
+    - 魚
+  weight: 1
+"ライフ :: ペット :: 鳥": 
+  keyword: 
+    - 鳥
   weight: 1
 "ライフ :: ライフ :: ライフ": 
   keyword: 
@@ -1002,9 +1029,13 @@ __DATA__
   keyword: 
     - ガーデニング
   weight: 1
-"ライフ :: 住まい :: 不動産・引っ越し": 
+"ライフ :: 住まい :: 不動産売買": 
   keyword: 
-    - 不動産 引っ越し
+    - 不動産売買
+  weight: 1
+"ライフ :: 住まい :: 不動産賃貸": 
+  keyword: 
+    - 不動産賃貸
   weight: 1
 "ライフ :: 住まい :: 住まい": 
   keyword: 
@@ -1014,22 +1045,66 @@ __DATA__
   keyword: 
     - 建築 リフォーム
   weight: 1
+"ライフ :: 住まい :: 引越し": 
+  keyword: 
+    - 引越し
+  weight: 1
+"ライフ :: 出産・育児 :: 不妊": 
+  keyword: 
+    - 不妊
+  weight: 1
+"ライフ :: 出産・育児 :: 出産": 
+  keyword: 
+    - 出産
+  weight: 1
 "ライフ :: 出産・育児 :: 出産・育児": 
   keyword: 
     - 出産 育児
   weight: 3
-"ライフ :: 出産・育児 :: 妊娠・出産": 
+"ライフ :: 出産・育児 :: 妊娠": 
   keyword: 
-    - 妊娠 出産
+    - 妊娠
   weight: 1
 "ライフ :: 出産・育児 :: 育児": 
   keyword: 
     - 育児
   weight: 1
+"ライフ :: 家電製品 :: その他（家電製品）": 
+  keyword: 
+    - その他（家電製品）
+  weight: 1
+"ライフ :: 家電製品 :: エアコン・空調": 
+  keyword: 
+    - エアコン 空調
+  weight: 1
+"ライフ :: 家電製品 :: 健康家電": 
+  keyword: 
+    - 健康家電
+  weight: 1
+"ライフ :: 家電製品 :: 冷蔵庫": 
+  keyword: 
+    - 冷蔵庫
+  weight: 1
 "ライフ :: 家電製品 :: 家電製品": 
   keyword: 
     - 家電製品
   weight: 3
+"ライフ :: 家電製品 :: 掃除機": 
+  keyword: 
+    - 掃除機
+  weight: 1
+"ライフ :: 家電製品 :: 洗濯機": 
+  keyword: 
+    - 洗濯機
+  weight: 1
+"ライフ :: 家電製品 :: 照明": 
+  keyword: 
+    - 照明
+  weight: 1
+"ライフ :: 家電製品 :: 調理器具": 
+  keyword: 
+    - 調理器具
+  weight: 1
 "ライフ :: 恋愛・人生相談 :: いじめ相談": 
   keyword: 
     - いじめ相談
@@ -1037,6 +1112,10 @@ __DATA__
 "ライフ :: 恋愛・人生相談 :: シニアライフ": 
   keyword: 
     - シニアライフ
+  weight: 1
+"ライフ :: 恋愛・人生相談 :: 友達・仲間関係": 
+  keyword: 
+    - 友達 仲間関係
   weight: 1
 "ライフ :: 恋愛・人生相談 :: 夫婦・家族": 
   keyword: 
@@ -1102,9 +1181,13 @@ __DATA__
   keyword: 
     - 季節の行事
   weight: 1
-"ライフ :: 生活お役立ち :: 家事・生活": 
+"ライフ :: 生活お役立ち :: 手紙・文例": 
   keyword: 
-    - 家事 生活
+    - 手紙 文例
+  weight: 1
+"ライフ :: 生活お役立ち :: 掃除・洗濯・家事全般": 
+  keyword: 
+    - 掃除 洗濯 家事全般
   weight: 1
 "ライフ :: 生活お役立ち :: 正月・年末年始": 
   keyword: 
@@ -1114,9 +1197,17 @@ __DATA__
   keyword: 
     - 生活お役立ち
   weight: 3
+"ライフ :: 生活お役立ち :: 郵便・宅配": 
+  keyword: 
+    - 郵便 宅配
+  weight: 1
 "ライフ :: 生活お役立ち :: 防犯・セキュリティ": 
   keyword: 
     - 防犯 セキュリティ
+  weight: 1
+"ライフ :: 生活お役立ち :: 電気・ガス・水道": 
+  keyword: 
+    - 電気 ガス 水道
   weight: 1
 "ライフ :: 結婚 :: ハネムーン・新生活": 
   keyword: 
@@ -1134,6 +1225,162 @@ __DATA__
   keyword: 
     - 結婚
   weight: 3
+"大規模災害 :: 東日本大震災情報 :: その他（東日本大震災）": 
+  keyword: 
+    - その他（東日本大震災）
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 交通・運行情報": 
+  keyword: 
+    - 交通 運行情報
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 募金・ボランティア・物資支援": 
+  keyword: 
+    - 募金 ボランティア 物資支援
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 地震の知識": 
+  keyword: 
+    - 地震の知識
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 外国の方からの相談": 
+  keyword: 
+    - 外国の方からの相談
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 妊婦・出産・子供の相談": 
+  keyword: 
+    - 妊婦 出産 子供の相談
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 安否確認：その他の地域": 
+  keyword: 
+    - 安否確認：その他の地域
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 安否確認：北海道": 
+  keyword: 
+    - 安否確認：北海道
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 安否確認：千葉": 
+  keyword: 
+    - 安否確認：千葉
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 安否確認：宮城": 
+  keyword: 
+    - 安否確認：宮城
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 安否確認：山形": 
+  keyword: 
+    - 安否確認：山形
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 安否確認：岩手": 
+  keyword: 
+    - 安否確認：岩手
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 安否確認：新潟": 
+  keyword: 
+    - 安否確認：新潟
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 安否確認：栃木": 
+  keyword: 
+    - 安否確認：栃木
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 安否確認：福島": 
+  keyword: 
+    - 安否確認：福島
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 安否確認：秋田": 
+  keyword: 
+    - 安否確認：秋田
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 安否確認：群馬": 
+  keyword: 
+    - 安否確認：群馬
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 安否確認：茨城": 
+  keyword: 
+    - 安否確認：茨城
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 安否確認：長野": 
+  keyword: 
+    - 安否確認：長野
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 安否確認：青森": 
+  keyword: 
+    - 安否確認：青森
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 応援メッセージ": 
+  keyword: 
+    - 応援メッセージ
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 東日本大震災情報": 
+  keyword: 
+    - 東日本大震災情報
+  weight: 3
+"大規模災害 :: 東日本大震災情報 :: 災害対策": 
+  keyword: 
+    - 災害対策
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 物資・支援情報：その他の地域": 
+  keyword: 
+    - 物資 支援情報：その他の地域
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 物資・支援情報：北海道": 
+  keyword: 
+    - 物資 支援情報：北海道
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 物資・支援情報：千葉": 
+  keyword: 
+    - 物資 支援情報：千葉
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 物資・支援情報：宮城": 
+  keyword: 
+    - 物資 支援情報：宮城
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 物資・支援情報：山形": 
+  keyword: 
+    - 物資 支援情報：山形
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 物資・支援情報：岩手": 
+  keyword: 
+    - 物資 支援情報：岩手
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 物資・支援情報：新潟": 
+  keyword: 
+    - 物資 支援情報：新潟
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 物資・支援情報：栃木": 
+  keyword: 
+    - 物資 支援情報：栃木
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 物資・支援情報：福島": 
+  keyword: 
+    - 物資 支援情報：福島
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 物資・支援情報：秋田": 
+  keyword: 
+    - 物資 支援情報：秋田
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 物資・支援情報：群馬": 
+  keyword: 
+    - 物資 支援情報：群馬
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 物資・支援情報：茨城": 
+  keyword: 
+    - 物資 支援情報：茨城
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 物資・支援情報：長野": 
+  keyword: 
+    - 物資 支援情報：長野
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 物資・支援情報：青森": 
+  keyword: 
+    - 物資 支援情報：青森
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 節電": 
+  keyword: 
+    - 節電
+  weight: 1
+"大規模災害 :: 東日本大震災情報 :: 避難所のくらし・工夫": 
+  keyword: 
+    - 避難所のくらし 工夫
+  weight: 1
 "学問＆教育 :: 中国語 :: 中国語": 
   keyword: 
     - 中国語
@@ -1274,6 +1521,94 @@ __DATA__
   keyword: 
     - 音楽
   weight: 3
+"旅行・レジャー :: 国内 :: 中国・四国": 
+  keyword: 
+    - 中国 四国
+  weight: 1
+"旅行・レジャー :: 国内 :: 九州・沖縄": 
+  keyword: 
+    - 九州 沖縄
+  weight: 1
+"旅行・レジャー :: 国内 :: 北海道": 
+  keyword: 
+    - 北海道
+  weight: 1
+"旅行・レジャー :: 国内 :: 国内": 
+  keyword: 
+    - 国内
+  weight: 3
+"旅行・レジャー :: 国内 :: 国内旅行(全国)": 
+  keyword: 
+    - 国内旅行(全国)
+  weight: 1
+"旅行・レジャー :: 国内 :: 東北": 
+  keyword: 
+    - 東北
+  weight: 1
+"旅行・レジャー :: 国内 :: 東海": 
+  keyword: 
+    - 東海
+  weight: 1
+"旅行・レジャー :: 国内 :: 甲信越・北陸": 
+  keyword: 
+    - 甲信越 北陸
+  weight: 1
+"旅行・レジャー :: 国内 :: 遊園地・テーマパーク(全国)": 
+  keyword: 
+    - 遊園地 テーマパーク(全国)
+  weight: 1
+"旅行・レジャー :: 国内 :: 関東": 
+  keyword: 
+    - 関東
+  weight: 1
+"旅行・レジャー :: 国内 :: 関西": 
+  keyword: 
+    - 関西
+  weight: 1
+"旅行・レジャー :: 国内 :: 食べ歩き(全国)": 
+  keyword: 
+    - 食べ歩き(全国)
+  weight: 1
+"旅行・レジャー :: 旅行・レジャー :: 旅行・レジャー": 
+  keyword: 
+    - 旅行 レジャー
+  weight: 3
+"旅行・レジャー :: 海外 :: アジア": 
+  keyword: 
+    - アジア
+  weight: 1
+"旅行・レジャー :: 海外 :: アフリカ": 
+  keyword: 
+    - アフリカ
+  weight: 1
+"旅行・レジャー :: 海外 :: オセアニア": 
+  keyword: 
+    - オセアニア
+  weight: 1
+"旅行・レジャー :: 海外 :: ヨーロッパ": 
+  keyword: 
+    - ヨーロッパ
+  weight: 1
+"旅行・レジャー :: 海外 :: 中南米・カリブ": 
+  keyword: 
+    - 中南米 カリブ
+  weight: 1
+"旅行・レジャー :: 海外 :: 中東": 
+  keyword: 
+    - 中東
+  weight: 1
+"旅行・レジャー :: 海外 :: 北アメリカ": 
+  keyword: 
+    - 北アメリカ
+  weight: 1
+"旅行・レジャー :: 海外 :: 海外": 
+  keyword: 
+    - 海外
+  weight: 3
+"旅行・レジャー :: 海外 :: 海外旅行(全般)": 
+  keyword: 
+    - 海外旅行(全般)
+  weight: 1
 "社会 :: エネルギー :: エコロジー": 
   keyword: 
     - エコロジー
@@ -1326,6 +1661,10 @@ __DATA__
   keyword: 
     - メディア マスコミ
   weight: 1
+"社会 :: 社会問題 :: 国際問題": 
+  keyword: 
+    - 国際問題
+  weight: 1
 "社会 :: 社会問題 :: 教育問題": 
   keyword: 
     - 教育問題
@@ -1362,10 +1701,6 @@ __DATA__
   keyword: 
     - 行政
   weight: 3
-"美容＆健康 :: キッズファッション/流行 :: キッズファッション/流行": 
-  keyword: 
-    - キッズファッション 流行
-  weight: 3
 "美容＆健康 :: コスメティック :: コスメティック": 
   keyword: 
     - コスメティック
@@ -1382,18 +1717,38 @@ __DATA__
   keyword: 
     - デンタルケア
   weight: 3
+"美容＆健康 :: ファッション :: キッズ": 
+  keyword: 
+    - キッズ
+  weight: 1
 "美容＆健康 :: ファッション :: ファッション": 
   keyword: 
     - ファッション
   weight: 3
-"美容＆健康 :: ヘアケア :: ヘアケア": 
+"美容＆健康 :: ファッション :: メンズ": 
   keyword: 
-    - ヘアケア
-  weight: 3
-"美容＆健康 :: メンズファッション/メンズビューティー :: メンズファッション/メンズビューティー": 
+    - メンズ
+  weight: 1
+"美容＆健康 :: ファッション :: レディース": 
   keyword: 
-    - メンズファッション メンズビューティー
+    - レディース
+  weight: 1
+"美容＆健康 :: ファッション :: 着物・和服": 
+  keyword: 
+    - 着物 和服
+  weight: 1
+"美容＆健康 :: ヘアケア・ヘアスタイル :: ヘアケア・ヘアスタイル": 
+  keyword: 
+    - ヘアケア ヘアスタイル
   weight: 3
+"美容＆健康 :: 健康 :: アレルギー・花粉症": 
+  keyword: 
+    - アレルギー 花粉症
+  weight: 1
+"美容＆健康 :: 健康 :: インフルエンザ": 
+  keyword: 
+    - インフルエンザ
+  weight: 1
 "美容＆健康 :: 健康 :: ヘルスケア(健康管理)": 
   keyword: 
     - ヘルスケア(健康管理)
@@ -1422,6 +1777,10 @@ __DATA__
   keyword: 
     - 病気
   weight: 1
+"美容＆健康 :: 健康 :: 病院": 
+  keyword: 
+    - 病院
+  weight: 1
 "美容＆健康 :: 健康 :: 癌": 
   keyword: 
     - 癌
@@ -1429,6 +1788,10 @@ __DATA__
 "美容＆健康 :: 健康 :: 禁煙・禁酒": 
   keyword: 
     - 禁煙 禁酒
+  weight: 1
+"美容＆健康 :: 健康 :: 薄毛・抜け毛": 
+  keyword: 
+    - 薄毛 抜け毛
   weight: 1
 "美容＆健康 :: 美容＆健康 :: 美容＆健康": 
   keyword: 
@@ -1438,13 +1801,9 @@ __DATA__
   keyword: 
     - AV機器
   weight: 3
-"趣味 :: AV機器 :: DVDプレーヤー": 
+"趣味 :: AV機器 :: Bluray・DVDプレーヤー": 
   keyword: 
-    - DVDプレーヤー
-  weight: 1
-"趣味 :: AV機器 :: TV＆ビデオデッキ": 
-  keyword: 
-    - TV ビデオデッキ
+    - Bluray DVDプレーヤー
   weight: 1
 "趣味 :: AV機器 :: iPod・携帯音楽プレーヤー": 
   keyword: 
@@ -1457,6 +1816,10 @@ __DATA__
 "趣味 :: AV機器 :: カメラ全般": 
   keyword: 
     - カメラ全般
+  weight: 1
+"趣味 :: AV機器 :: テレビ・レコーダー": 
+  keyword: 
+    - テレビ レコーダー
   weight: 1
 "趣味 :: アウトドア :: BBQ・アウトドア料理": 
   keyword: 
@@ -1546,9 +1909,9 @@ __DATA__
   keyword: 
     - 国産車
   weight: 1
-"趣味 :: 車 :: 自転車": 
+"趣味 :: 車 :: 自転車・マウンテンバイク": 
   keyword: 
-    - 自転車
+    - 自転車 マウンテンバイク
   weight: 1
 "趣味 :: 車 :: 車": 
   keyword: 

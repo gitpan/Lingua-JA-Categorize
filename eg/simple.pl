@@ -34,11 +34,15 @@ sub loop {
     print "\n";
 
     print "Result(score) :\n";
-    print Dumper $result->score();
+    print Dumper $result->score;
     print "\n";
 
     print "Confidence : ";
     print $result->confidence, "\n";
+    print "\n";
+
+    print "UserExtention : ";
+    print Dumper $result->user_extention, "\n";
     print "\n";
 
     loop();

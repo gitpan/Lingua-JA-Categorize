@@ -1,5 +1,11 @@
 Revision history for Perl extension Lingua::JA::Categorize
 
+0.02002  2011/07/07
+        - update sample.bin data
+
+0.02001  2009/10/19
+        - add user_extention() method on Lingua::JA::Categorize::Result
+
 0.01001  2009/10/06
         - add confidence() method on Lingua::JA::Categorize::Result
         - and some changes(slightly)

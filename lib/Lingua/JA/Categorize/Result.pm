@@ -50,9 +50,10 @@ sub confidence {
     my $w1 = 5;
     my $w2 = 1;
     my $w3 = 1;
-    my $confidence_point =
-      ( $w1 * $match_word_point + $w2 * $entropy_point + $w3 * $distance_point )
-      / ( $w1 + $w2 + $w3 );
+    my $confidence_point
+        = (   $w1 * $match_word_point 
+            + $w2 * $entropy_point
+            + $w3 * $distance_point ) / ( $w1 + $w2 + $w3 );
 
     #print "M:", $match_word_point, "\n";
     #print "E:", $entropy_point,    "\n";
@@ -66,8 +67,8 @@ sub _distance_point {
     my $self  = shift;
     my $n     = shift || 3;
     my $brain = $self->context->categorizer->brain;
-    my @categories =
-      map { keys %$_; } @{ $self->score($n) };
+    my @categories
+        = map { keys %$_; } @{ $self->score($n) };
 
     # 必要なデータを抽出
     my $data;
@@ -142,8 +143,8 @@ sub _match_word_point {
 
 sub _entropy_point {
     my $self = shift;
-    my @scores =
-      map { values %$_; } @{ $self->score(5) };
+    my @scores
+        = map { values %$_; } @{ $self->score(5) };
     my $sum = sum(@scores);
     my $e   = 0;
     my ( $p, $z );
@@ -178,6 +179,12 @@ sub matches {
     my $self    = shift;
     my $matches = $self->{matches};
     return $matches;
+}
+
+sub user_extention {
+    my $self           = shift;
+    my $user_extention = $self->{user_extention};
+    return $user_extention;
 }
 
 1;

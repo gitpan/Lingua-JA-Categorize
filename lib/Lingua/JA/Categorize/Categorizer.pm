@@ -31,10 +31,13 @@ sub new {
     my $class = shift;
     my $self  = $class->SUPER::new(@_);
     $self->brain( Algorithm::NaiveBayes->new( purge => 0 ) );
+	#use Devel::Size qw(size total_size);
+	#use Devel::Peek;
     {
         no warnings 'redefine';
         *Algorithm::NaiveBayes::Model::Frequency::do_predict = sub {
             my ( $self, $m, $newattrs ) = @_;
+		#	print "IN :", total_size($m), "\n";	
             my %scores = %{ $m->{prior_probs} };
             while ( my ( $feature, $value ) = each %$newattrs ) {
                 unless ( exists $m->{attributes}{$feature} ) {
@@ -45,12 +48,17 @@ sub new {
                     push( @{ $self->{match_features} }, $feature );
                 }
                 while ( my ( $label, $attributes ) = each %{ $m->{probs} } ) {
-                    $scores{$label} +=
-                      ( $attributes->{$feature} || $m->{smoother}{$label} ) *
-                      $value;
+					my $p = ($attributes->{$feature} || $m->{smoother}{$label});
+					$scores{$label} += $p * $value;
+
+                    #$scores{$label} +=
+                    #  ( $attributes->{$feature} || $m->{smoother}->{$label} ) *
+                    #  $value;
                 }
             }
+		#	print "OUT:", total_size($m), "\n";	
             Algorithm::NaiveBayes::Util::rescale( \%scores );
+
             return \%scores;
         };
     }
@@ -58,19 +66,21 @@ sub new {
 }
 
 sub categorize {
-    my $self     = shift;
-    my $word_set = shift;
-    undef $self->brain->{no_match_features};
-    undef $self->brain->{match_features};
+    my $self           = shift;
+    my $word_set       = shift;
+    my $user_extention = shift;
+    $self->brain->{no_match_features} = [];
+    $self->brain->{match_features}    = [];
     my $score      = $self->brain->predict( attributes => $word_set );
     my $no_matches = $self->brain->{no_match_features};
     my $matches    = $self->brain->{match_features};
     my $result     = Lingua::JA::Categorize::Result->new(
-        context    => $self->context,
-        score      => $score,
-        matches    => $matches,
-        no_matches => $no_matches,
-        word_set   => $word_set,
+        context        => $self->context,
+        score          => $score,
+        matches        => $matches,
+        no_matches     => $no_matches,
+        word_set       => $word_set,
+        user_extention => $user_extention,
     );
     return $result;
 }

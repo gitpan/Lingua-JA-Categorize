@@ -1,6 +1,7 @@
 package Lingua::JA::Categorize::Base;
 use strict;
 use warnings;
+use Scalar::Util qw(weaken);
 use base qw(Class::Accessor::Fast Class::Data::ConfigHash);
 use Carp;
 
@@ -12,6 +13,7 @@ sub new {
     my $config = delete $args{config};
     my $self   = $class->SUPER::new( {@_} );
     $self->config($config) if $config;
+	weaken( $self->{context} );
     return $self;
 }
 

@@ -4,7 +4,7 @@ use warnings;
 use Lingua::JA::TFIDF;
 use base qw( Lingua::JA::Categorize::Base );
 
-__PACKAGE__->mk_accessors($_) for qw( calc );
+__PACKAGE__->mk_accessors($_) for qw( calc user_extention);
 
 sub new {
     my $class = shift;
@@ -19,20 +19,31 @@ sub tokenize {
     my $threshold = shift;
 
     my $text = $$text_ref;
-    my $http_URL_regex =
-        q{\b(?:https?|shttp)://(?:(?:[-_.!~*'()a-zA-Z0-9;:&=+$,]|%[0-9A-Fa-f}
-      . q{][0-9A-Fa-f])*@)?(?:(?:[a-zA-Z0-9](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?\.)}
-      . q{*[a-zA-Z](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?\.?|[0-9]+\.[0-9]+\.[0-9]+\.}
-      . q{[0-9]+)(?::[0-9]*)?(?:/(?:[-_.!~*'()a-zA-Z0-9:@&=+$,]|%[0-9A-Fa-f]}
-      . q{[0-9A-Fa-f])*(?:;(?:[-_.!~*'()a-zA-Z0-9:@&=+$,]|%[0-9A-Fa-f][0-9A-}
-      . q{Fa-f])*)*(?:/(?:[-_.!~*'()a-zA-Z0-9:@&=+$,]|%[0-9A-Fa-f][0-9A-Fa-f}
-      . q{])*(?:;(?:[-_.!~*'()a-zA-Z0-9:@&=+$,]|%[0-9A-Fa-f][0-9A-Fa-f])*)*)}
-      . q{*)?(?:\?(?:[-_.!~*'()a-zA-Z0-9;/?:@&=+$,]|%[0-9A-Fa-f][0-9A-Fa-f])}
-      . q{*)?(?:#(?:[-_.!~*'()a-zA-Z0-9;/?:@&=+$,]|%[0-9A-Fa-f][0-9A-Fa-f])*}
-      . q{)?};
+    my $http_URL_regex
+        = q{\b(?:https?|shttp)://(?:(?:[-_.!~*'()a-zA-Z0-9;:&=+$,]|%[0-9A-Fa-f}
+        . q{][0-9A-Fa-f])*@)?(?:(?:[a-zA-Z0-9](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?\.)}
+        . q{*[a-zA-Z](?:[-a-zA-Z0-9]*[a-zA-Z0-9])?\.?|[0-9]+\.[0-9]+\.[0-9]+\.}
+        . q{[0-9]+)(?::[0-9]*)?(?:/(?:[-_.!~*'()a-zA-Z0-9:@&=+$,]|%[0-9A-Fa-f]}
+        . q{[0-9A-Fa-f])*(?:;(?:[-_.!~*'()a-zA-Z0-9:@&=+$,]|%[0-9A-Fa-f][0-9A-}
+        . q{Fa-f])*)*(?:/(?:[-_.!~*'()a-zA-Z0-9:@&=+$,]|%[0-9A-Fa-f][0-9A-Fa-f}
+        . q{])*(?:;(?:[-_.!~*'()a-zA-Z0-9:@&=+$,]|%[0-9A-Fa-f][0-9A-Fa-f])*)*)}
+        . q{*)?(?:\?(?:[-_.!~*'()a-zA-Z0-9;/?:@&=+$,]|%[0-9A-Fa-f][0-9A-Fa-f])}
+        . q{*)?(?:#(?:[-_.!~*'()a-zA-Z0-9;/?:@&=+$,]|%[0-9A-Fa-f][0-9A-Fa-f])*}
+        . q{)?};
     $text =~ s/$http_URL_regex//g;
 
-    my $list = $self->calc->tfidf($text)->list($threshold);
+    my $tfidf_result = $self->calc->tfidf($text);
+
+    my %user_extention;
+    while ( my ( $keyword, $ref ) = each %{ $tfidf_result->{data} } ) {
+        my @f = split( ",", $ref->{info} );
+        if ( $f[6] eq 'ユーザ設定' ) {
+            $user_extention{$keyword} = $f[9];
+        }
+    }
+    $self->user_extention( \%user_extention );
+
+    my $list = $tfidf_result->list($threshold);
     my %hash;
     for (@$list) {
         my ( $word, $score ) = each(%$_);

@@ -13,13 +13,21 @@ use FindBin;
 use List::MoreUtils qw(any);
 use lib "$FindBin::RealBin/more_train/lib";
 
-my $yaml = YAML::Load( join '', <DATA> );
+#-- Lingua::JA::Expand のためのYahooAPI appid の入力促進
+print
+    "Yahoo API appIDを入力してください（2011年4月以降、有料版でないとうまく動作しなくなりました) : ";
+my $appid = <STDIN>;
+chomp $appid;
+die("Yahoo API appIDが入力されていません") if !$appid;
 
+# configなど
+my $yaml     = YAML::Load( join '', <DATA> );
 my $config   = $yaml->{config};
 my $template = $yaml->{template};
 
+# HTTPサーバ生成
 my $server = POE::Component::Server::HTTP->new(
-    Port           => 7777,
+    Port           => 80,
     ContentHandler => {
         '/'           => \&index,
         '/my.js'      => \&js,
@@ -29,6 +37,7 @@ my $server = POE::Component::Server::HTTP->new(
     }
 );
 
+# POE メインセッション
 POE::Session->create(
     inline_states => {
         _start => sub {
@@ -38,7 +47,7 @@ POE::Session->create(
             $heap->{categorizer}->load( $config->{state_file} );
             $heap->{extractor} = HTML::Feature->new(
                 engines => [
-                    'MyEngine::Osiete',    # 教えてgoo 専用
+                    'MyEngine::Oshiete',    # 教えてgoo 専用
                     'HTML::Feature::Engine::LDRFullFeed',
                     'HTML::Feature::Engine::GoogleADSection',
                     'HTML::Feature::Engine::TagStructure',
@@ -49,8 +58,10 @@ POE::Session->create(
     }
 );
 
+# ループ開始
 POE::Kernel->run();
 
+#-- 以下サブルーチン
 sub index {
     my ( $req, $res ) = @_;
     my $heap     = $poe_kernel->alias_resolve("main")->get_heap();
@@ -102,9 +113,12 @@ sub categorize {
     my $categorizer = $heap->{categorizer};
     my $result;
     if ( $q->param("expand") ) {
-        my $expander = Lingua::JA::Expand->new;
+        my $expander = Lingua::JA::Expand->new(
+            yahoo_api_appid   => $appid,
+            yahoo_api_premium => 1
+        );
         my $word_set = $expander->expand( $text, 20 );
-        my $parsed   = $categorizer->categorizer->categorize($word_set);
+        my $parsed = $categorizer->categorizer->categorize($word_set);
         $result = Lingua::JA::Categorize::Result->new(
             word_set   => $word_set,
             score      => $parsed->{score},
@@ -113,7 +127,7 @@ sub categorize {
         );
     }
     else {
-        $result = $categorizer->categorize($text,20);
+        $result = $categorizer->categorize($text);
     }
     my $tt       = $heap->{tt};
     my $template = $template->{score_table};
@@ -145,13 +159,13 @@ sub categorize {
     }
 
     #-- categories の整形処理
-    my @categories =
-      keys %{ $categorizer->categorizer->{brain}->{'model'}->{'prior_probs'} };
+    my @categories
+        = keys
+        %{ $categorizer->categorizer->{brain}->{'model'}->{'prior_probs'} };
     @categories = sort @categories;
     $tt->process(
         \$template,
-        {
-            score      => \@score,
+        {   score      => \@score,
             word_set   => \@word_set,
             categories => \@categories,
             expand     => $q->param("expand")
@@ -194,7 +208,8 @@ sub train {
     my $word_set;
 
     if ( $q->param("expand") ) {
-        my $expander = Lingua::JA::Expand->new;
+        my $expander = Lingua::JA::Expand->new(
+            yahoo_api_appid => $config->{'yahoo_api_appid'} );
         $word_set = $expander->expand( $text, 20 );
     }
     else {

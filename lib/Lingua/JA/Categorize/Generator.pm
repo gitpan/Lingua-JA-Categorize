@@ -11,10 +11,14 @@ sub generate {
     my $categories = shift;
     my $brain      = shift;
     my $save_file  = shift;
-    my $expander   = Lingua::JA::Expand->new;
+    my $c          = $self->context;
+	print $c->config->{yahoo_api_appid};<>;
+    my $expander   = Lingua::JA::Expand->new(
+        yahoo_api_appid   => $c->config->{yahoo_api_appid},
+        yahoo_api_premium => 1
+    );
 
     while ( my ( $label, $ref ) = each %$categories ) {
-        print $label, "\n";
         my $weight  = $ref->{weight};
         my @keyword = @{ $ref->{keyword} };
         for my $keyword (@keyword) {
@@ -33,6 +37,7 @@ sub generate {
             }
         }
         $brain->train;
+        print $label, "\n";
     }
     $brain->save_state($save_file) if $save_file;
 }
